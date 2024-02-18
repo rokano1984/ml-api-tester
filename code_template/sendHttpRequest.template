@@ -1,0 +1,55 @@
+%-------------------------------------------------------------
+% Request Method
+%-------------------------------------------------------------
+method = matlab.net.http.RequestMethod.%{method};
+
+%-------------------------------------------------------------
+% URI
+%-------------------------------------------------------------
+uri = matlab.net.URI('%{uri}');
+
+%-------------------------------------------------------------
+% Header
+%-------------------------------------------------------------
+header = matlab.net.http.HeaderField('User-Agent','MATLAB');
+headerT = %{headerT};
+for ii=1:height(headerT)
+    header = addFields(header, headerT(ii,:).Key{:}, headerT(ii,:).Value{:});
+end
+
+%-------------------------------------------------------------
+% Body
+%-------------------------------------------------------------
+bodyContentType = '%{bodyContentType}';
+bodyData = %{bodyData};
+switch bodyContentType
+    case 'None'
+        body = matlab.net.http.MessageBody();
+        header = changeFields(header,"Content-Length", 0);
+    case 'JSON'
+        bodyData = string(jsonencode(jsondecode(bodyData)));
+        body = matlab.net.http.MessageBody(jsondecode(bodyData));
+        header = changeFields(header,"Content-Type","application/json");
+        header = changeFields(header,"Content-Length", bodyData.strlength);
+    case 'Text'
+        body = matlab.net.http.MessageBody(bodyData);
+        header = changeFields(header,"Content-Type","text/plain");
+        header = changeFields(header,"Content-Length", bodyData.strlength);
+end
+
+%-------------------------------------------------------------
+% HTTP Option
+%-------------------------------------------------------------
+option = matlab.net.http.HTTPOptions('ConnectTimeout',20);
+obj.option.Debug = true;
+
+%-------------------------------------------------------------
+% Send a request
+%-------------------------------------------------------------
+request = matlab.net.http.RequestMessage(method,header,body);
+[response,request,history] = request.send(uri, option);
+
+%-------------------------------------------------------------
+% Show response
+%-------------------------------------------------------------
+response.show();
