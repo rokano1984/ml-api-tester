@@ -114,7 +114,7 @@ classdef AppHTTPClient < handle
 
         function generateMFile(obj,filePath)
             try
-                mlines = readlines("code_template\sendHttpRequest.template");
+                mlines = readlines(fullfile("code_template","sendHttpRequest.template"));
                 % Method
                 mlines = replace(mlines,"%{method}",obj.method);
                 % URI
