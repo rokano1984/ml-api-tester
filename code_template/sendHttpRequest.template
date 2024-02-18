@@ -22,19 +22,20 @@ end
 %-------------------------------------------------------------
 bodyContentType = '%{bodyContentType}';
 bodyData = %{bodyData};
+header = removeFields(header,"Content-Length");
+header = removeFields(header,"Content-Type");
 switch bodyContentType
     case 'None'
         body = matlab.net.http.MessageBody();
-        header = changeFields(header,"Content-Length", 0);
     case 'JSON'
-        bodyData = string(jsonencode(jsondecode(bodyData)));
-        body = matlab.net.http.MessageBody(jsondecode(bodyData));
-        header = changeFields(header,"Content-Type","application/json");
-        header = changeFields(header,"Content-Length", bodyData.strlength);
+        bodyData = string(jsonencode(common.util.csjsondecode(bodyData)));
+        body = matlab.net.http.MessageBody(common.util.csjsondecode(bodyData));
+        header = addFields(header,"Content-Type","application/json");
+        header = addFields(header,"Content-Length", bodyData.strlength);
     case 'Text'
         body = matlab.net.http.MessageBody(bodyData);
-        header = changeFields(header,"Content-Type","text/plain");
-        header = changeFields(header,"Content-Length", bodyData.strlength);
+        header = addFields(header,"Content-Type","text/plain");
+        header = addFields(header,"Content-Length", bodyData.strlength);
 end
 
 %-------------------------------------------------------------
