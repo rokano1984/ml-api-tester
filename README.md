@@ -18,13 +18,8 @@ Developed and Tested on MATLAB R2023b.
 1. Go to package folder
 2. Double-click ML_APITester.mlappinstall file.
 3. You will see pop-up dialog, so proceed app installation.
-4. To run as MATLAB App
+4. From "Apps" tab on MATLAB Desktop, click "ML_APITester" icon
 
-   - from "Apps" tab on MATLAB Desktop, click "ML_APITester" icon
-
-   - or run following command from your MATLAB Command Window.
-
-     ```ML_APITester```
 
 ## Run from source code
 Run following command from your MATLAB Command Window.
